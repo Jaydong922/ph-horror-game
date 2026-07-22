@@ -26,6 +26,11 @@ body{background:#101018;color:#7dd3fc;overflow:hidden}
 /* MENSAHE */
 .msg{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:18px;background:rgba(0,0,0,.7);padding:10px 20px;border-radius:4px;opacity:0;transition:.5s;text-shadow:0 0 5px #0ea5e9;z-index:10}
 .msg.show{opacity:1}
+
+/* CONTROLLER */
+.controller{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:1rem;z-index:10}
+.controller button{background:rgba(14,165,233,.2);border:2px solid #0ea5e9;color:#7dd3fc;padding:1rem 2rem;font-size:1rem;border-radius:4px;cursor:pointer}
+.controller button:hover{background:rgba(14,165,233,.4)}
 </style>
 </head>
 <body>
@@ -41,8 +46,14 @@ body{background:#101018;color:#7dd3fc;overflow:hidden}
 
 <div class="msg" id="msg"></div>
 
+<div class="controller">
+  <button id="left">⬅️ KALIWA</button>
+  <button id="right">➡️ KANAN</button>
+</div>
+
 <script>
 let hasKey = false;
+let pos = 50;
 const keyEl = document.getElementById('key');
 const doorEl = document.getElementById('door');
 const keyStatus = document.getElementById('keyStatus');
@@ -77,7 +88,6 @@ doorEl.addEventListener('touchstart', e=>{
 });
 
 // GALAW SA SCREEN
-let pos = 50;
 document.addEventListener('touchstart', e=>{
   const x = e.touches[0].clientX;
   if(x > window.innerWidth/2 && pos < 90) {
@@ -87,6 +97,25 @@ document.addEventListener('touchstart', e=>{
   if(x < window.innerWidth/2 && pos > 10) {
     pos -= 5;
     showMsg("⬅️ Lumilipat ka sa kaliwa...");
+  }
+  document.querySelector('.screen').style.backgroundPosition = `${pos}% 50%`;
+});
+
+// CONTROLLER BUTTONS
+document.getElementById('left').addEventListener('touchstart', e=>{
+  e.preventDefault();
+  if(pos > 10) {
+    pos -= 5;
+    showMsg("⬅️ Lumilipat ka sa kaliwa...");
+  }
+  document.querySelector('.screen').style.backgroundPosition = `${pos}% 50%`;
+});
+
+document.getElementById('right').addEventListener('touchstart', e=>{
+  e.preventDefault();
+  if(pos < 90) {
+    pos += 5;
+    showMsg("➡️ Lumilipat ka sa kanan...");
   }
   document.querySelector('.screen').style.backgroundPosition = `${pos}% 50%`;
 });
