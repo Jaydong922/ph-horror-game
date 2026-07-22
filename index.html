@@ -13,46 +13,46 @@ canvas{display:block}
 <body>
 <div class="ui">🏚️ SA LILIM NG LUMANG BAHAY | GAMITIN ANG DALIRI PARA LUMIPAT</div>
 <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.150.0/examples/js/controls/PointerLockControls.js"></script>
 
 <script>
 // SETUP
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0a0a0a); // Sobrang dilim
-scene.fog = new THREE.Fog(0x0a0a0a, 2, 18); // Parang may hamog
+scene.background = new THREE.Color(0x101015); // Medyo mas maliwanag na itim
+scene.fog = new THREE.Fog(0x101015, 3, 20); // Hamog na hindi sobrang dilim
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 50);
 const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 
 // GROUND
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(25,25),
-  new THREE.MeshStandardMaterial({color:0x181818, roughness:0.8})
-);
+const groundGeo = new THREE.PlaneGeometry(30,30);
+const groundMat = new THREE.MeshStandardMaterial({color:0x252525, roughness:0.9});
+const ground = new THREE.Mesh(groundGeo, groundMat);
 ground.rotation.x = -Math.PI/2;
 scene.add(ground);
 
-// DILIM AT ILaw
-const light = new THREE.PointLight(0x223355, 0.25, 12);
-light.position.set(0, 2.2, 0);
-scene.add(light);
-
-// KWARTO
-const wallMat = new THREE.MeshStandardMaterial({color:0x2c2c2c});
+// MGA DINGDING (Makikita mo na agad)
+const wallMat = new THREE.MeshStandardMaterial({color:0x3a3a40});
 function makeWall(x,z,w,h){
   const wl = new THREE.Mesh(new THREE.BoxGeometry(w,h,1), wallMat);
   wl.position.set(x,h/2,z);
   scene.add(wl);
 }
-makeWall(-12,0,1,6); makeWall(12,0,1,6);
-makeWall(0,-12,24,6); makeWall(0,12,24,6);
+makeWall(-15,0,1,7); makeWall(15,0,1,7);
+makeWall(0,-15,30,7); makeWall(0,15,30,7);
+
+// ILaw (Mas malakas para makita ang paligid)
+const light = new THREE.PointLight(0x4466aa, 0.7, 25);
+light.position.set(0, 3, 0);
+light.castShadow = true;
+scene.add(light);
 
 // GALAW NG TAO
-let move = {f:false,b:false,l:false,r:false};
-let vel = 0.07;
-let pos = {x:0,z:4};
+let move = {f:false,b:false};
+let vel = 0.08;
+let pos = {x:0,z:6};
 
 document.addEventListener('touchstart', e=>{
   const x = e.touches[0].clientX;
@@ -61,18 +61,19 @@ document.addEventListener('touchstart', e=>{
 });
 document.addEventListener('touchend', ()=>{move.f=move.b=false});
 
-// I-UPDATE
+// ANIMATION LOOP
 function animate(){
   requestAnimationFrame(animate);
   if(move.f) pos.z -= vel;
   if(move.b) pos.z += vel;
   camera.position.set(pos.x, 1.7, pos.z);
+  camera.rotation.y = 0;
   renderer.render(scene, camera);
 }
 animate();
 
 window.addEventListener('resize', ()=>{
-  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
