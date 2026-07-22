@@ -7,44 +7,88 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Orbitron,sans-serif}
 body{background:#101018;color:#7dd3fc;overflow:hidden}
-.screen{width:100vw;height:100vh;position:relative}
-.room{width:100%;height:100%;background:linear-gradient(#1a1a28,#080810);border:8px solid #252540;display:flex;align-items:center;justify-content:center}
-.text{font-size:clamp(1.5rem,5vw,2.5rem);text-shadow:0 0 15px #0ea5e9;text-align:center;padding:2rem}
-.controls{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:1rem}
-.btn{background:rgba(14,165,233,.2);border:2px solid #0ea5e9;color:#7dd3fc;padding:1rem 2rem;font-size:1rem;border-radius:4px;cursor:pointer}
+.screen{width:100vw;height:100vh;position:relative;background:linear-gradient(#1a1a28,#080810);border:8px solid #252540}
+
+/* TEXT AT IMPORMASYON */
+.ui{position:absolute;top:15px;left:15px;font-size:16px;text-shadow:0 0 8px #0ea5e9;z-index:10}
+.inventory{position:absolute;top:15px;right:15px;font-size:16px;text-shadow:0 0 8px #facc15;z-index:10}
+
+/* OBJEKTO: ANG SUSI */
+.key{position:absolute;top:60%;left:30%;font-size:50px;cursor:pointer;transition:.3s;filter:drop-shadow(0 0 15px #facc15);animation:float 2s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.key:hover{transform:scale(1.2)}
+
+/* PINTO */
+.door{position:absolute;top:20%;right:10%;width:80px;height:200px;background:#4a3a2a;border:4px solid #7a5a3a;display:flex;align-items:center;justify-content:center;font-size:14px;color:#c9a676;text-align:center;transition:.5s}
+.door.open{background:#2a5a3a;border-color:#4a9a5a;box-shadow:0 0 25px #22c55e}
+.door span{writing-mode:vertical-rl}
+
+/* MENSAHE */
+.msg{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:18px;background:rgba(0,0,0,.7);padding:10px 20px;border-radius:4px;opacity:0;transition:.5s;text-shadow:0 0 5px #0ea5e9;z-index:10}
+.msg.show{opacity:1}
 </style>
 </head>
 <body>
 
-<div class="screen">
-  <div class="room">
-    <div class="text">🏚️ SA LILIM NG LUMANG BAHAY<br><br>GUMAGANA NA!<br>KANAN = USAD | KALIWA = ATAS</div>
-  </div>
-  <div class="controls">
-    <button class="btn" id="left">⬅️ KALIWA</button>
-    <button class="btn" id="right">➡️ KANAN</button>
-  </div>
+<div class="ui">🏚️ SA LILIM NG LUMANG BAHAY</div>
+<div class="inventory">🎒 DALA: <span id="keyStatus">WALA</span></div>
+
+<div class="door" id="door">
+  <span>NAKALOCK<br>🔒</span>
 </div>
 
+<div class="key" id="key">🔑</div>
+
+<div class="msg" id="msg"></div>
+
 <script>
+let hasKey = false;
+const keyEl = document.getElementById('key');
+const doorEl = document.getElementById('door');
+const keyStatus = document.getElementById('keyStatus');
+const msgEl = document.getElementById('msg');
+
+// IPakita ang mensahe
+function showMsg(text){
+  msgEl.textContent = text;
+  msgEl.classList.add('show');
+  setTimeout(()=>msgEl.classList.remove('show'), 3000);
+}
+
+// KUNIN ANG SUSI
+keyEl.addEventListener('touchstart', e=>{
+  e.preventDefault();
+  hasKey = true;
+  keyEl.style.display = 'none';
+  keyStatus.textContent = 'SUSI 🔑';
+  showMsg("✅ NAKUHA MO ANG SUSI! Pwede mo nang buksan ang pinto.");
+});
+
+// BUKSAN ANG PINTO
+doorEl.addEventListener('touchstart', e=>{
+  e.preventDefault();
+  if(hasKey){
+    doorEl.classList.add('open');
+    doorEl.innerHTML = '<span>BUKSAN<br>🔓</span>';
+    showMsg("🔓 BUMUKAS ANG PINTO... May nakikita kang anino sa loob...");
+  } else {
+    showMsg("❌ NAKALOCK! Kailangan mo ng susi para mabuksan.");
+  }
+});
+
+// GALAW SA SCREEN
 let pos = 50;
-const room = document.querySelector('.room');
-
-document.getElementById('left').addEventListener('touchstart', ()=>{
-  if(pos > 10) pos -= 5;
-  room.style.backgroundPosition = `${pos}% 50%`;
-});
-
-document.getElementById('right').addEventListener('touchstart', ()=>{
-  if(pos < 90) pos += 5;
-  room.style.backgroundPosition = `${pos}% 50%`;
-});
-
 document.addEventListener('touchstart', e=>{
   const x = e.touches[0].clientX;
-  if(x > window.innerWidth/2 && pos < 90) pos += 5;
-  if(x < window.innerWidth/2 && pos > 10) pos -= 5;
-  room.style.backgroundPosition = `${pos}% 50%`;
+  if(x > window.innerWidth/2 && pos < 90) {
+    pos += 5;
+    showMsg("➡️ Lumilipat ka sa kanan...");
+  }
+  if(x < window.innerWidth/2 && pos > 10) {
+    pos -= 5;
+    showMsg("⬅️ Lumilipat ka sa kaliwa...");
+  }
+  document.querySelector('.screen').style.backgroundPosition = `${pos}% 50%`;
 });
 </script>
 
