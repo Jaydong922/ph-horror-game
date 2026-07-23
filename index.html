@@ -2,157 +2,196 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PH HORROR GAME 🇵🇭 | CYBERJAYD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PH HORROR TALES 🇵🇭 | SURVIVAL</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
     --dark:#050505;
     --blood:#9b0000;
-    --fog:#2b2b2b;
-    --ghost:#888888;
-    --glow-red:0 0 20px #ff0000;
-    --glow-blue:0 0 15px #00bfff;
+    --red-glow:0 0 18px #ff0000;
+    --fog:#222;
+    --safe:#00aa44;
+    --ui:#1a1a1a;
+    --text:#ddd;
 }
+
 body{
     background:var(--dark);
-    color:#ddd;
+    color:var(--text);
     font-family:'Rajdhani',sans-serif;
     min-height:100vh;
-    overflow:hidden;
+    overflow-x:hidden;
     position:relative;
 }
-/* FOG & EFFECTS */
+
+/* EFFECTS */
 .fog{
     position:fixed;
     inset:0;
-    background:radial-gradient(circle at center, transparent 30%, rgba(0,0,0,.85) 100%);
+    background:radial-gradient(circle at center, transparent 25%, rgba(0,0,0,.9) 100%);
     pointer-events:none;
-    z-index:2;
+    z-index:1;
 }
 .noise{
     position:fixed;
     inset:0;
-    opacity:.08;
-    background-image:url('data:image/svg+xml,%3Csvg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%" height="100%" filter="url(%23n)"/%3E%3C/svg%3E');
-    z-index:3;
+    opacity:.07;
+    background-image:url('data:image/svg+xml,%3Csvg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%" height="100%" filter="url(%23n)"/%3E%3C/svg%3E');
+    z-index:2;
     pointer-events:none;
 }
+
 /* HEADER */
 header{
     position:relative;
     z-index:10;
     text-align:center;
-    padding:2rem 1rem;
+    padding:1.5rem 1rem;
     border-bottom:1px solid var(--blood);
-    box-shadow:0 0 25px rgba(155,0,0,.3);
+    box-shadow:var(--red-glow);
 }
 h1{
     font-family:'Orbitron',sans-serif;
-    font-size:clamp(2rem,6vw,4rem);
+    font-size:clamp(2rem,8vw,3.5rem);
     color:var(--blood);
-    text-shadow:var(--glow-red);
-    letter-spacing:3px;
+    text-shadow:var(--red-glow);
+    letter-spacing:2px;
 }
 .subtitle{
-    font-size:1.2rem;
-    color:var(--ghost);
-    margin-top:.5rem;
+    font-size:1rem;
+    color:#888;
+    margin-top:.3rem;
 }
+
+/* STATUS BAR */
+.status-bar{
+    position:relative;
+    z-index:10;
+    background:var(--ui);
+    padding:.8rem 1rem;
+    border-bottom:1px solid #333;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:.5rem;
+}
+.stat{
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    font-size:.95rem;
+    font-weight:600;
+}
+.bar{
+    width:100px;
+    height:10px;
+    background:#333;
+    border-radius:5px;
+    overflow:hidden;
+}
+.bar-fill{
+    height:100%;
+    transition:.3s;
+}
+.hp{background:var(--blood)}
+.energy{background:#cc8800}
+
 /* GAME AREA */
-.game-container{
+.game-screen{
     position:relative;
     z-index:5;
     max-width:900px;
-    margin:2rem auto;
-    padding:1rem;
-}
-.game-screen{
-    width:100%;
-    aspect-ratio:16/9;
-    background:#111;
+    margin:1rem auto;
+    padding:1.5rem;
+    min-height:50vh;
+    background:rgba(10,10,10,.85);
     border:2px solid var(--blood);
     border-radius:8px;
-    box-shadow:var(--glow-red);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.5rem;
-    color:#666;
-    position:relative;
-    overflow:hidden;
+    box-shadow:var(--red-glow);
 }
-/* BUTTONS */
-.btn-group{
-    display:flex;
-    gap:1rem;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-top:2rem;
+.scene-title{
+    font-family:'Orbitron',sans-serif;
+    color:var(--blood);
+    font-size:1.4rem;
+    margin-bottom:1rem;
+    text-align:center;
 }
-.btn{
-    padding:.8rem 2rem;
+.scene-text{
+    font-size:1.1rem;
+    line-height:1.8;
+    text-align:center;
+    margin-bottom:1.5rem;
+}
+
+/* CHOICES BUTTONS */
+.choices{
+    display:flex;
+    flex-direction:column;
+    gap:.8rem;
+}
+.choice-btn{
+    width:100%;
+    padding:1rem;
     background:transparent;
     border:1px solid var(--blood);
-    color:var(--blood);
-    font-family:'Orbitron',sans-serif;
+    color:var(--text);
+    font-family:'Rajdhani',sans-serif;
     font-size:1rem;
+    font-weight:600;
+    border-radius:6px;
     cursor:pointer;
     transition:.3s;
-    border-radius:4px;
 }
-.btn:hover{
+.choice-btn:hover{
     background:rgba(155,0,0,.2);
-    box-shadow:var(--glow-red);
-    transform:translateY(-2px);
+    box-shadow:0 0 12px var(--blood);
+    transform:scale(1.02);
 }
-.btn.primary{
+
+/* START / END SCREEN */
+.start-screen, .end-screen{
+    text-align:center;
+    padding:2rem 1rem;
+}
+.main-btn{
+    padding:1rem 2.5rem;
     background:var(--blood);
     color:white;
-}
-.btn.primary:hover{
-    background:#c00;
-}
-/* INFO */
-.info-box{
-    background:rgba(20,20,20,.8);
-    border:1px solid #333;
-    border-radius:6px;
-    padding:1.2rem;
-    margin-top:2rem;
-    backdrop-filter:blur(4px);
-}
-.info-box h3{
-    color:var(--ghost);
-    margin-bottom:.5rem;
+    border:none;
     font-family:'Orbitron',sans-serif;
+    font-size:1.2rem;
+    border-radius:6px;
+    cursor:pointer;
+    transition:.3s;
+    margin-top:1.5rem;
+    box-shadow:var(--red-glow);
 }
-.info-box p{
-    line-height:1.6;
-    color:#aaa;
+.main-btn:hover{
+    background:#c00;
+    transform:translateY(-2px);
 }
+
 /* FOOTER */
 footer{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
+    position:relative;
+    z-index:10;
     text-align:center;
     padding:1rem;
-    font-size:.85rem;
-    color:#444;
+    font-size:.8rem;
+    color:#555;
     border-top:1px solid #222;
-    z-index:10;
+    margin-top:2rem;
 }
-footer a{
-    color:var(--neon-blue);
-    text-decoration:none;
-}
-/* RESPONSIVE */
+
+/* MOBILE OPTIMIZATION */
 @media(max-width:600px){
-    h1{font-size:2rem}
-    .game-screen{font-size:1rem}
+    .game-screen{padding:1rem; margin:.5rem}
+    .scene-text{font-size:1rem}
+    .choice-btn{padding:.9rem; font-size:.95rem}
+    .status-bar{font-size:.85rem}
 }
 </style>
 </head>
@@ -163,76 +202,187 @@ footer a{
 
 <header>
     <h1>PH HORROR TALES</h1>
-    <p class="subtitle">🇵🇭 FILIPINO URBAN LEGENDS • MADE BY CYBERJAYD</p>
+    <p class="subtitle">🇵🇭 SURVIVAL HORROR • FILIPINO LEGENDS</p>
 </header>
 
-<div class="game-container">
-    <div class="game-screen" id="gameArea">
-        🎮 LOADING HORROR STORIES...
-    </div>
+<!-- STATUS BAR -->
+<div class="status-bar" id="status" style="display:none">
+    <div class="stat">❤️ HP: <div class="bar"><div class="bar-fill hp" id="hpBar" style="width:100%"></div></div> <span id="hpText">100</span></div>
+    <div class="stat">⚡ ENERGY: <div class="bar"><div class="bar-fill energy" id="engBar" style="width:100%"></div></div> <span id="engText">100</span></div>
+    <div class="stat">🎒 ITEMS: <span id="items">None</span></div>
+</div>
 
-    <div class="btn-group">
-        <button class="btn primary" onclick="startGame()">START GAME</button>
-        <button class="btn" onclick="showAbout()">ABOUT</button>
-        <button class="btn" onclick="showCredits()">CREDITS</button>
-    </div>
-
-    <div class="info-box">
-        <h3>👻 ABOUT THIS PROJECT</h3>
-        <p>Experience famous Filipino horror stories like <strong>Tikbalang, Aswang, Manananggal, White Lady</strong> and more! Built purely with HTML, CSS & JS — developed 100% on Android phone via Termux / Ubuntu. No PC required.</p>
-        <p><strong>Developer:</strong> Jayd F. Repoberbio | Web Engineer & Security Researcher</p>
+<!-- GAME AREA -->
+<div class="game-screen" id="gameArea">
+    <div class="start-screen">
+        <h2 style="color:var(--blood); font-size:2rem; margin-bottom:1rem;">👻 ARE YOU BRAVE ENOUGH?</h2>
+        <p style="font-size:1.1rem; color:#aaa;">Journey through haunted places in the Philippines. Face Tikbalang, Aswang, Manananggal, and more. <br>Make the right choices to SURVIVE!</p>
+        <button class="main-btn" onclick="startGame()">▶️ START SURVIVAL</button>
     </div>
 </div>
 
 <footer>
-    © 2027 CYBERJAYD SYSTEMS | Built with passion • Powered by pure code<br>
-    <a href="https://jaydong922.github.io">jaydong922.github.io</a>
+    © 2027 CYBERJAYD SYSTEMS | Made by Jayd F. Repoberbio<br>
+    Built 100% on Mobile • Pure HTML/CSS/JS
 </footer>
 
 <script>
-// SIMPLE GAME LOGIC
-const gameArea = document.getElementById('gameArea');
+// GAME VARIABLES
+let hp = 100;
+let energy = 100;
+let items = [];
+let currentScene = 0;
 
+// SCENES DATA — MARAMING KWENTO AT PANGYAYARI
+const scenes = [
+    {
+        title: "🌲 THE DARK FOREST",
+        text: "You are walking home late at night. Suddenly, the path disappears. Tall trees surround you. You hear heavy footsteps... something is watching you from the shadows.",
+        choices: [
+            {text: "🔦 Light your flashlight and look around", effect: "safe", next:1},
+            {text: "🏃 Run fast without looking back", effect: "damage", val:20, next:2},
+            {text: "🛡️ Stay still and wait quietly", effect: "item", item:"Wooden Stick", next:3}
+        ]
+    },
+    {
+        title: "👹 TIKBALANG ENCOUNTER",
+        text: "A tall creature with long legs and horse head appears! It blocks your way. It is the Tikbalang — known to trick travelers. It is staring at you intensely.",
+        choices: [
+            {text: "🙏 Pray and cross your fingers", effect: "safe", next:4},
+            {text: "🗣️ Shout loud and challenge it", effect: "damage", val:30, next:5},
+            {text: "🔄 Turn your clothes inside out", effect: "item", item:"Protection Charm", next:6}
+        ]
+    },
+    {
+        title: "🏚️ ABANDONED HOUSE",
+        text: "You ran and reached an old, broken house. Doors are open. You hear crying sounds from inside... it sounds like a woman.",
+        choices: [
+            {text: "🚪 Enter carefully to check", effect: "damage", val:15, next:7},
+            {text: "🚫 Stay outside and observe", effect: "safe", next:8},
+            {text: "🌿 Hide in the bushes nearby", effect: "energy", val:-20, next:9}
+        ]
+    },
+    {
+        title: "🩸 ASWANG TERRITORY",
+        text: "You smell something rotten. A woman with sharp teeth and long nails is flying above! She is looking for food. She spotted you!",
+        choices: [
+            {text: "🧂 Throw salt at her!", effect: "safe", next:10},
+            {text: "🔪 Use your stick to defend", effect: "damage", val:25, next:11},
+            {text: "🏃 Hide behind big trees", effect: "energy", val:-30, next:12}
+        ]
+    },
+    {
+        title: "🌙 MANANANGGAL ATTACK",
+        text: "Half of a woman’s body is flying! Her lower half is left on the ground. She is very dangerous. You must find her weakness quickly!",
+        choices: [
+            {text: "✂️ Put ash on her lower body", effect: "safe", next:13},
+            {text: "🔥 Burn the grass around", effect: "damage", val:20, next:14},
+            {text: "🌑 Run to the dark areas", effect: "damage", val:35, next:15}
+        ]
+    },
+    {
+        title: "👻 WHITE LADY",
+        text: "A beautiful woman in white stands on the road. She looks sad, but her eyes are empty. She asks you to help her cross the street.",
+        choices: [
+            {text: "❌ Ignore and keep walking", effect: "safe", next:16},
+            {text: "🤝 Help her politely", effect: "damage", val:40, next:17},
+            {text: "💬 Talk to her calmly", effect: "item", item:"Blessed Water", next:18}
+        ]
+    },
+    {
+        title: "🏁 THE EXIT",
+        text: "After many dangers, you see lights ahead! You found the way out of the haunted area. You survived all the legends! 🎉",
+        choices: [
+            {text: "✅ FINISH GAME", effect: "win", next:-1}
+        ]
+    }
+];
+
+// START GAME
 function startGame(){
-    gameArea.innerHTML = `<span style="color:#ff4444">👁️ ENTERING THE DARK...<br>Prepare yourself...</span>`;
-    setTimeout(() => {
-        gameArea.innerHTML = `
-        <div style="text-align:center; padding:1rem;">
-            <h2 style="color:var(--blood); margin-bottom:1rem;">🏚️ THE OLD HOUSE</h2>
-            <p style="font-size:1.1rem; line-height:1.7;">You walk near an old abandoned house in the province... suddenly you hear a strange sound from the window...<br><br>
-            <strong>What will you do?</strong></p>
-            <div style="margin-top:1.5rem;">
-                <button class="btn" onclick="choice1()">👉 GO CLOSER</button>
-                <button class="btn" onclick="choice2()">🏃 RUN AWAY</button>
-            </div>
-        </div>`;
-    }, 2000);
+    hp = 100;
+    energy = 100;
+    items = [];
+    currentScene = 0;
+    document.getElementById('status').style.display = 'flex';
+    updateStatus();
+    showScene();
 }
 
-function choice1(){
-    gameArea.innerHTML = `<span style="color:#ff0000; font-size:1.3rem;">💀 GAME OVER<br>You found something you shouldn't have...</span>`;
-}
-function choice2(){
-    gameArea.innerHTML = `<span style="color:#00ff88; font-size:1.3rem;">✅ SAFE<br>Good choice! You survived the night.</span>`;
+// DISPLAY CURRENT SCENE
+function showScene(){
+    if(hp <= 0){
+        gameOver();
+        return;
+    }
+    if(currentScene >= scenes.length){
+        victory();
+        return;
+    }
+
+    const s = scenes[currentScene];
+    let html = `
+    <div class="scene-title">${s.title}</div>
+    <div class="scene-text">${s.text}</div>
+    <div class="choices">
+    `;
+    s.choices.forEach((ch, i) => {
+        html += `<button class="choice-btn" onclick="selectChoice(${i})">${ch.text}</button>`;
+    });
+    html += `</div>`;
+
+    document.getElementById('gameArea').innerHTML = html;
 }
 
-function showAbout(){
-    gameArea.innerHTML = `<div style="padding:1rem; text-align:left;">
-    <h3 style="color:var(--blood);">📖 GAME INFO</h3>
-    <p>Genre: Interactive Horror / Storytelling</p>
-    <p>Theme: Filipino Folklore & Urban Legends</p>
-    <p>Platform: Web Browser / Mobile Friendly</p>
-    <p>Created: July 2026</p>
+// CHOICE ACTION
+function selectChoice(num){
+    const ch = scenes[currentScene].choices[num];
+    
+    // APPLY EFFECT
+    if(ch.effect === "damage"){
+        hp = Math.max(0, hp - ch.val);
+    } else if(ch.effect === "energy"){
+        energy = Math.max(0, energy - ch.val);
+    } else if(ch.effect === "item"){
+        items.push(ch.item);
+    }
+
+    updateStatus();
+    currentScene = ch.next;
+
+    setTimeout(showScene, 600);
+}
+
+// UPDATE STATUS UI
+function updateStatus(){
+    document.getElementById('hpBar').style.width = hp + '%';
+    document.getElementById('hpText').textContent = hp;
+    document.getElementById('engBar').style.width = energy + '%';
+    document.getElementById('engText').textContent = energy;
+    document.getElementById('items').textContent = items.length > 0 ? items.join(', ') : 'None';
+}
+
+// GAME OVER
+function gameOver(){
+    document.getElementById('gameArea').innerHTML = `
+    <div class="end-screen">
+        <h2 style="color:var(--blood); font-size:2.5rem;">💀 GAME OVER</h2>
+        <p style="font-size:1.2rem; margin:1rem 0;">You were taken by the spirits... Better luck next time!</p>
+        <button class="main-btn" onclick="startGame()">🔄 TRY AGAIN</button>
     </div>`;
+    document.getElementById('status').style.display = 'none';
 }
 
-function showCredits(){
-    gameArea.innerHTML = `<div style="padding:1rem;">
-    <h3 style="color:var(--blood);">✨ CREDITS</h3>
-    <p>Concept & Coding: Jayd F. Repoberbio</p>
-    <p>Design: CyberJayd Studio</p>
-    <p>Made possible with pure code and passion 💙</p>
+// VICTORY
+function victory(){
+    document.getElementById('gameArea').innerHTML = `
+    <div class="end-screen">
+        <h2 style="color:var(--safe); font-size:2.5rem;">🏆 YOU SURVIVED!</h2>
+        <p style="font-size:1.2rem; margin:1rem 0;">You proved you are brave! You mastered all Filipino legends and escaped safely.</p>
+        <p style="color:#888;">Items collected: ${items.length} | Remaining HP: ${hp}</p>
+        <button class="main-btn" onclick="startGame()">🔄 PLAY AGAIN</button>
     </div>`;
+    document.getElementById('status').style.display = 'none';
 }
 </script>
 </body>
