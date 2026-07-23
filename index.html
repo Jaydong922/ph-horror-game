@@ -1,125 +1,239 @@
 <!DOCTYPE html>
-<html lang="tl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sa Lilim ng Lumang Bahay</title>
+<title>PH HORROR GAME 🇵🇭 | CYBERJAYD</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Orbitron,sans-serif}
-body{background:#101018;color:#7dd3fc;overflow:hidden}
-.screen{width:100vw;height:100vh;position:relative;background:linear-gradient(#1a1a28,#080810);border:8px solid #252540}
-
-/* TEXT AT IMPORMASYON */
-.ui{position:absolute;top:15px;left:15px;font-size:16px;text-shadow:0 0 8px #0ea5e9;z-index:10}
-.inventory{position:absolute;top:15px;right:15px;font-size:16px;text-shadow:0 0 8px #facc15;z-index:10}
-
-/* OBJEKTO: ANG SUSI */
-.key{position:absolute;top:60%;left:30%;font-size:50px;cursor:pointer;transition:.3s;filter:drop-shadow(0 0 15px #facc15);animation:float 2s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.key:hover{transform:scale(1.2)}
-
-/* PINTO */
-.door{position:absolute;top:20%;right:10%;width:80px;height:200px;background:#4a3a2a;border:4px solid #7a5a3a;display:flex;align-items:center;justify-content:center;font-size:14px;color:#c9a676;text-align:center;transition:.5s}
-.door.open{background:#2a5a3a;border-color:#4a9a5a;box-shadow:0 0 25px #22c55e}
-.door span{writing-mode:vertical-rl}
-
-/* MENSAHE */
-.msg{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:18px;background:rgba(0,0,0,.7);padding:10px 20px;border-radius:4px;opacity:0;transition:.5s;text-shadow:0 0 5px #0ea5e9;z-index:10}
-.msg.show{opacity:1}
-
-/* CONTROLLER */
-.controller{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:1rem;z-index:10}
-.controller button{background:rgba(14,165,233,.2);border:2px solid #0ea5e9;color:#7dd3fc;padding:1rem 2rem;font-size:1rem;border-radius:4px;cursor:pointer}
-.controller button:hover{background:rgba(14,165,233,.4)}
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+    --dark:#050505;
+    --blood:#9b0000;
+    --fog:#2b2b2b;
+    --ghost:#888888;
+    --glow-red:0 0 20px #ff0000;
+    --glow-blue:0 0 15px #00bfff;
+}
+body{
+    background:var(--dark);
+    color:#ddd;
+    font-family:'Rajdhani',sans-serif;
+    min-height:100vh;
+    overflow:hidden;
+    position:relative;
+}
+/* FOG & EFFECTS */
+.fog{
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle at center, transparent 30%, rgba(0,0,0,.85) 100%);
+    pointer-events:none;
+    z-index:2;
+}
+.noise{
+    position:fixed;
+    inset:0;
+    opacity:.08;
+    background-image:url('data:image/svg+xml,%3Csvg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%" height="100%" filter="url(%23n)"/%3E%3C/svg%3E');
+    z-index:3;
+    pointer-events:none;
+}
+/* HEADER */
+header{
+    position:relative;
+    z-index:10;
+    text-align:center;
+    padding:2rem 1rem;
+    border-bottom:1px solid var(--blood);
+    box-shadow:0 0 25px rgba(155,0,0,.3);
+}
+h1{
+    font-family:'Orbitron',sans-serif;
+    font-size:clamp(2rem,6vw,4rem);
+    color:var(--blood);
+    text-shadow:var(--glow-red);
+    letter-spacing:3px;
+}
+.subtitle{
+    font-size:1.2rem;
+    color:var(--ghost);
+    margin-top:.5rem;
+}
+/* GAME AREA */
+.game-container{
+    position:relative;
+    z-index:5;
+    max-width:900px;
+    margin:2rem auto;
+    padding:1rem;
+}
+.game-screen{
+    width:100%;
+    aspect-ratio:16/9;
+    background:#111;
+    border:2px solid var(--blood);
+    border-radius:8px;
+    box-shadow:var(--glow-red);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.5rem;
+    color:#666;
+    position:relative;
+    overflow:hidden;
+}
+/* BUTTONS */
+.btn-group{
+    display:flex;
+    gap:1rem;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:2rem;
+}
+.btn{
+    padding:.8rem 2rem;
+    background:transparent;
+    border:1px solid var(--blood);
+    color:var(--blood);
+    font-family:'Orbitron',sans-serif;
+    font-size:1rem;
+    cursor:pointer;
+    transition:.3s;
+    border-radius:4px;
+}
+.btn:hover{
+    background:rgba(155,0,0,.2);
+    box-shadow:var(--glow-red);
+    transform:translateY(-2px);
+}
+.btn.primary{
+    background:var(--blood);
+    color:white;
+}
+.btn.primary:hover{
+    background:#c00;
+}
+/* INFO */
+.info-box{
+    background:rgba(20,20,20,.8);
+    border:1px solid #333;
+    border-radius:6px;
+    padding:1.2rem;
+    margin-top:2rem;
+    backdrop-filter:blur(4px);
+}
+.info-box h3{
+    color:var(--ghost);
+    margin-bottom:.5rem;
+    font-family:'Orbitron',sans-serif;
+}
+.info-box p{
+    line-height:1.6;
+    color:#aaa;
+}
+/* FOOTER */
+footer{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    text-align:center;
+    padding:1rem;
+    font-size:.85rem;
+    color:#444;
+    border-top:1px solid #222;
+    z-index:10;
+}
+footer a{
+    color:var(--neon-blue);
+    text-decoration:none;
+}
+/* RESPONSIVE */
+@media(max-width:600px){
+    h1{font-size:2rem}
+    .game-screen{font-size:1rem}
+}
 </style>
 </head>
 <body>
 
-<div class="ui">🏚️ SA LILIM NG LUMANG BAHAY</div>
-<div class="inventory">🎒 DALA: <span id="keyStatus">WALA</span></div>
+<div class="fog"></div>
+<div class="noise"></div>
 
-<div class="door" id="door">
-  <span>NAKALOCK<br>🔒</span>
+<header>
+    <h1>PH HORROR TALES</h1>
+    <p class="subtitle">🇵🇭 FILIPINO URBAN LEGENDS • MADE BY CYBERJAYD</p>
+</header>
+
+<div class="game-container">
+    <div class="game-screen" id="gameArea">
+        🎮 LOADING HORROR STORIES...
+    </div>
+
+    <div class="btn-group">
+        <button class="btn primary" onclick="startGame()">START GAME</button>
+        <button class="btn" onclick="showAbout()">ABOUT</button>
+        <button class="btn" onclick="showCredits()">CREDITS</button>
+    </div>
+
+    <div class="info-box">
+        <h3>👻 ABOUT THIS PROJECT</h3>
+        <p>Experience famous Filipino horror stories like <strong>Tikbalang, Aswang, Manananggal, White Lady</strong> and more! Built purely with HTML, CSS & JS — developed 100% on Android phone via Termux / Ubuntu. No PC required.</p>
+        <p><strong>Developer:</strong> Jayd F. Repoberbio | Web Engineer & Security Researcher</p>
+    </div>
 </div>
 
-<div class="key" id="key">🔑</div>
-
-<div class="msg" id="msg"></div>
-
-<div class="controller">
-  <button id="left">⬅️ KALIWA</button>
-  <button id="right">➡️ KANAN</button>
-</div>
+<footer>
+    © 2027 CYBERJAYD SYSTEMS | Built with passion • Powered by pure code<br>
+    <a href="https://jaydong922.github.io">jaydong922.github.io</a>
+</footer>
 
 <script>
-let hasKey = false;
-let pos = 50;
-const keyEl = document.getElementById('key');
-const doorEl = document.getElementById('door');
-const keyStatus = document.getElementById('keyStatus');
-const msgEl = document.getElementById('msg');
+// SIMPLE GAME LOGIC
+const gameArea = document.getElementById('gameArea');
 
-// IPakita ang mensahe
-function showMsg(text){
-  msgEl.textContent = text;
-  msgEl.classList.add('show');
-  setTimeout(()=>msgEl.classList.remove('show'), 3000);
+function startGame(){
+    gameArea.innerHTML = `<span style="color:#ff4444">👁️ ENTERING THE DARK...<br>Prepare yourself...</span>`;
+    setTimeout(() => {
+        gameArea.innerHTML = `
+        <div style="text-align:center; padding:1rem;">
+            <h2 style="color:var(--blood); margin-bottom:1rem;">🏚️ THE OLD HOUSE</h2>
+            <p style="font-size:1.1rem; line-height:1.7;">You walk near an old abandoned house in the province... suddenly you hear a strange sound from the window...<br><br>
+            <strong>What will you do?</strong></p>
+            <div style="margin-top:1.5rem;">
+                <button class="btn" onclick="choice1()">👉 GO CLOSER</button>
+                <button class="btn" onclick="choice2()">🏃 RUN AWAY</button>
+            </div>
+        </div>`;
+    }, 2000);
 }
 
-// KUNIN ANG SUSI
-keyEl.addEventListener('touchstart', e=>{
-  e.preventDefault();
-  hasKey = true;
-  keyEl.style.display = 'none';
-  keyStatus.textContent = 'SUSI 🔑';
-  showMsg("✅ NAKUHA MO ANG SUSI! Pwede mo nang buksan ang pinto.");
-});
+function choice1(){
+    gameArea.innerHTML = `<span style="color:#ff0000; font-size:1.3rem;">💀 GAME OVER<br>You found something you shouldn't have...</span>`;
+}
+function choice2(){
+    gameArea.innerHTML = `<span style="color:#00ff88; font-size:1.3rem;">✅ SAFE<br>Good choice! You survived the night.</span>`;
+}
 
-// BUKSAN ANG PINTO
-doorEl.addEventListener('touchstart', e=>{
-  e.preventDefault();
-  if(hasKey){
-    doorEl.classList.add('open');
-    doorEl.innerHTML = '<span>BUKSAN<br>🔓</span>';
-    showMsg("🔓 BUMUKAS ANG PINTO... May nakikita kang anino sa loob...");
-  } else {
-    showMsg("❌ NAKALOCK! Kailangan mo ng susi para mabuksan.");
-  }
-});
+function showAbout(){
+    gameArea.innerHTML = `<div style="padding:1rem; text-align:left;">
+    <h3 style="color:var(--blood);">📖 GAME INFO</h3>
+    <p>Genre: Interactive Horror / Storytelling</p>
+    <p>Theme: Filipino Folklore & Urban Legends</p>
+    <p>Platform: Web Browser / Mobile Friendly</p>
+    <p>Created: July 2026</p>
+    </div>`;
+}
 
-// GALAW SA SCREEN
-document.addEventListener('touchstart', e=>{
-  const x = e.touches[0].clientX;
-  if(x > window.innerWidth/2 && pos < 90) {
-    pos += 5;
-    showMsg("➡️ Lumilipat ka sa kanan...");
-  }
-  if(x < window.innerWidth/2 && pos > 10) {
-    pos -= 5;
-    showMsg("⬅️ Lumilipat ka sa kaliwa...");
-  }
-  document.querySelector('.screen').style.backgroundPosition = `${pos}% 50%`;
-});
-
-// CONTROLLER BUTTONS
-document.getElementById('left').addEventListener('touchstart', e=>{
-  e.preventDefault();
-  if(pos > 10) {
-    pos -= 5;
-    showMsg("⬅️ Lumilipat ka sa kaliwa...");
-  }
-  document.querySelector('.screen').style.backgroundPosition = `${pos}% 50%`;
-});
-
-document.getElementById('right').addEventListener('touchstart', e=>{
-  e.preventDefault();
-  if(pos < 90) {
-    pos += 5;
-    showMsg("➡️ Lumilipat ka sa kanan...");
-  }
-  document.querySelector('.screen').style.backgroundPosition = `${pos}% 50%`;
-});
+function showCredits(){
+    gameArea.innerHTML = `<div style="padding:1rem;">
+    <h3 style="color:var(--blood);">✨ CREDITS</h3>
+    <p>Concept & Coding: Jayd F. Repoberbio</p>
+    <p>Design: CyberJayd Studio</p>
+    <p>Made possible with pure code and passion 💙</p>
+    </div>`;
+}
 </script>
-
 </body>
 </html>
